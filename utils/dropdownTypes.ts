@@ -1,30 +1,30 @@
 export type themeType =
-  | "Modern"
-  | "Vintage"
-  | "Minimalist"
-  | "Professional"
-  | "Tropical";
+  | 'Xeriscaping'
+  | 'Orchard'
+  | 'Minimalism'
+  | 'Exotic'
+  | 'Tropical'
 
-export type roomType =
-  | "Living Room"
-  | "Dining Room"
-  | "Bedroom"
-  | "Bathroom"
-  | "Office"
-  | "Gaming Room";
+export type yardType =
+  | 'Dry Garden'
+  | 'Courtyard Garden'
+  | 'Dry Laid'
+  | 'Ecological'
+  | 'Fescue'
+  | 'Gazebo'
 
 export const themes: themeType[] = [
-  "Modern",
-  "Minimalist",
-  "Professional",
-  "Tropical",
-  "Vintage",
-];
-export const rooms: roomType[] = [
-  "Living Room",
-  "Dining Room",
-  "Office",
-  "Bedroom",
-  "Bathroom",
-  "Gaming Room",
-];
+  'Xeriscaping',
+  'Minimalism',
+  'Exotic',
+  'Tropical',
+  'Orchard',
+]
+export const yards: yardType[] = [
+  'Dry Garden',
+  'Courtyard Garden',
+  'Dry Laid',
+  'Ecological',
+  'Fescue',
+  'Gazebo',
+]

@@ -1,11 +1,11 @@
-import Document, { Head, Html, Main, NextScript } from "next/document";
+import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document {
   render() {
-    let description = "Generate your dream room in seconds.";
-    let ogimage = "https://www.roomgpt.io/og-image.png";
-    let sitename = "roomGPT.io";
-    let title = "Dream Room Generator";
+    let description = 'Generate your dream yard/garden in seconds.'
+    let ogimage = 'https://www.roomgpt.io/og-image.png'
+    let sitename = 'yardPT.io'
+    let title = 'Dream Yard/Garden Generator'
 
     return (
       <Html lang="en">
@@ -21,13 +21,13 @@ class MyDocument extends Document {
           <meta property="og:image" content={ogimage} />
           <meta name="twitter:image" content={ogimage} />
         </Head>
-        <body className="bg-[#17181C] text-white">
+        <body className="bg-slate-50 text-black">
           <Main />
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
 
-export default MyDocument;
+export default MyDocument
