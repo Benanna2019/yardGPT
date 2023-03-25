@@ -2,7 +2,22 @@
 
 ## This project is a clone/alteration of [@nutlope's](https://twitter.com/nutlope) [roomGPT.io](https://roomGPT.io)
 
-This project generates designs of your room with AI.
+This project generates designs of your yard with AI.
+
+Why this project? A few days after [@nutlope](https://twitter.com/nutlope) launched his roomGPT project my wife and I were sitting thinking/dreaming about what to do with our back yard and how to change it into a nicer yard garden. 
+
+So I just started experimenting with the original roomGPT code and was able to get an ok version of yardGPT working. This just turned out to be fun initially but I now have a roadmap
+
+### Project Roadmap Before Public Launch
+
+- [ ] - Add nextauth
+- [ ] - Model flow of user/signing/payment after supabase template stack on Vercel
+- [ ] - Add ability for people to sign in. 
+- [ ] - Have people pay per image. 
+
+_Why are you having payments?_ Well, to be frank, this all cost a decent amount of money once anyone starts using it. So I have to have a way for it to stay running/operating for people to use it, otherwise 2 images will be generated and Ill have to shut it down (2 is an exageration but you get the point). 
+
+Below is some modified copy/copied text for the readme from @nutlope's roomGPT project.
 
 [![Yard GPT](./public/screenshot.png)](https://roomGPT.io)
 
