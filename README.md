@@ -1,8 +1,10 @@
-# [roomGPT.io](https://roomGPT.io)
+# yardGPT
+
+## This project is a clone/alteration of [@nutlope's](https://twitter.com/nutlope) [roomGPT.io](https://roomGPT.io)
 
 This project generates designs of your room with AI.
 
-[![Room GPT](./public/screenshot.png)](https://roomGPT.io)
+[![Yard GPT](./public/screenshot.png)](https://roomGPT.io)
 
 ## How it works
 
@@ -10,7 +12,9 @@ It uses an ML model called [ControlNet](https://github.com/lllyasviel/ControlNet
 
 ## Running Locally
 
-### Cloning the repository the local machine.
+### Cloning the repository the local machine. 
+
+_This will be cloning the original roomGPT repository_
 
 ```bash
 git clone https://github.com/Nutlope/roomGPT
