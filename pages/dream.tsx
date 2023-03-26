@@ -48,7 +48,6 @@ const Home: NextPage = () => {
   const { data, mutate } = useSWR("/api/remaining", fetcher);
   const { data: session, status } = useSession();
 
-  console.log('session', session)
   const options = {
     maxFileCount: 1,
     mimeTypes: ['image/jpeg', 'image/png', 'image/jpg'],
