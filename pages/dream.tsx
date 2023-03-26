@@ -2,10 +2,12 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { useSession, signIn } from "next-auth/react";
+import useSWR from 'swr'
 import { UploadDropzone } from 'react-uploader'
 import { Uploader } from 'uploader'
-import { RiNumber1, RiNumber2, RiNumber3 } from 'react-icons/ri'
 import { CompareSlider } from '../components/CompareSlider'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -16,7 +18,10 @@ import appendNewToName from '../utils/appendNewToName'
 import downloadPhoto from '../utils/downloadPhoto'
 import DropDown from '../components/DropDown'
 import { yardType, yards, themeType, themes } from '../utils/dropdownTypes'
+import { Rings } from "react-loader-spinner";
 import { GenerateResponseData } from './api/generate'
+import { Toaster, toast } from "react-hot-toast";
+import Link from 'next/link'
 
 // Configuration for the uploader
 const uploader = Uploader({
@@ -24,26 +29,7 @@ const uploader = Uploader({
     ? process.env.NEXT_PUBLIC_UPLOAD_API_KEY
     : 'free',
 })
-const options = {
-  maxFileCount: 1,
-  mimeTypes: ['image/jpeg', 'image/png', 'image/jpg'],
-  editor: { images: { crop: false } },
-  styles: {
-    colors: {
-      primary: '#000', // Primary buttons & links
-      error: '#d23f4d', // Error messages
-      shade100: '#000', // Standard text
-      shade200: '#000e', // Secondary button text
-      shade300: '#000d', // Secondary button text (hover)
-      shade400: '#000c', // Welcome text
-      shade500: '#0009', // Modal close button
-      shade600: '#0007', // Border
-      shade700: '#fff2', // Progress indicator background
-      shade800: '#fff1', // File item background
-      shade900: '#ffff', // Various (draggable crop buttons, etc.)
-    },
-  },
-}
+
 
 const Home: NextPage = () => {
   const [originalPhoto, setOriginalPhoto] = useState<string | null>(null)
@@ -55,6 +41,39 @@ const Home: NextPage = () => {
   const [photoName, setPhotoName] = useState<string | null>(null)
   const [theme, setTheme] = useState<themeType>('Xeriscaping')
   const [yard, setYard] = useState<yardType>('Ecological')
+
+  const router = useRouter()
+
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  const { data, mutate } = useSWR("/api/remaining", fetcher);
+  const { data: session, status } = useSession();
+
+  console.log('session', session)
+  const options = {
+    maxFileCount: 1,
+    mimeTypes: ['image/jpeg', 'image/png', 'image/jpg'],
+    editor: { images: { crop: false } },
+    styles: {
+      colors: {
+        primary: '#000', // Primary buttons & links
+        error: '#d23f4d', // Error messages
+        shade100: '#000', // Standard text
+        shade200: '#000e', // Secondary button text
+        shade300: '#000d', // Secondary button text (hover)
+        shade400: '#000c', // Welcome text
+        shade500: '#0009', // Modal close button
+        shade600: '#0007', // Border
+        shade700: '#fff2', // Progress indicator background
+        shade800: '#fff1', // File item background
+        shade900: '#ffff', // Various (draggable crop buttons, etc.)
+      },
+    },
+    onValidate: async (file: File): Promise<undefined | string> => {
+      return data.remainingGenerations === 0
+        ? `No more credits left. Buy more above.`
+        : undefined;
+    },
+  }
 
   const UploadDropZone = () => (
     <UploadDropzone
@@ -89,6 +108,7 @@ const Home: NextPage = () => {
     if (res.status !== 200) {
       setError(response as any)
     } else {
+      mutate();
       const yards =
         (JSON.parse(localStorage.getItem('yards') || '[]') as string[]) || []
       yards.push(response.id)
@@ -100,87 +120,79 @@ const Home: NextPage = () => {
     }, 1300)
   }
 
+  useEffect(() => {
+    if (router.query.success === "true") {
+      toast.success("Payment successful!");
+    }
+  }, [router.query.success]);
+
   return (
     <div className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center py-2">
       <Head>
         <title>YardGPT</title>
       </Head>
-      <Header />
+      <Header
+        photo={session?.user?.image || undefined}
+        email={session?.user?.email || undefined}
+      />
       <main className="mt-4 mb-8 flex w-full flex-1 flex-col items-center justify-center px-4 text-center sm:mb-0">
+      {status === "authenticated" ? (
+          <Link
+            href="/buy-credits"
+            className="border border-gray-700 rounded-2xl py-2 px-4 text-gray-400 text-sm my-6 duration-300 ease-in-out hover:text-gray-300 hover:scale-105 transition"
+          >
+            Pricing is now available.{" "}
+            <span className="font-semibold text-gray-200">Click here</span> to
+            buy credits!
+          </Link>
+        ) : (
+          <h3
+            className="border border-gray-700 rounded-2xl py-2 px-4 text-gray-400 text-sm my-6 duration-300 ease-in-out hover:text-gray-300 transition"
+          >
+            Redisign your yard, garden, and exterior spaces with YardGPT.{" "}
+          </h3>
+        )}
         <h1 className="font-display mx-auto mb-5 max-w-4xl text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl">
           Generate your <span className="text-emerald-600">dream</span> yard
         </h1>
-        <p className="text-gray-900">
-          <span className="font-bold text-gray-800">Note:</span> We're
-          temporarily{' '}
-          <span className="font-bold text-gray-800">
-            limiting generations to 3 per day
-          </span>{' '}
-          because of high traffic.
-        </p>
-        <ResizablePanel>
+        {status === "authenticated" && data && !restoredImage && (
+          <p className="text-gray-400">
+            You have{" "}
+            <span className="font-semibold text-gray-300">
+              {data.remainingGenerations}{" "}
+              {data?.remainingGenerations > 1 ? "credits" : "credit"}
+            </span>{" "}
+            left.{" "}
+            {data.remainingGenerations < 2 && (
+              <span>
+                Buy more credits{" "}
+                <Link
+                  href="/buy-credits"
+                  className="font-semibold text-gray-300 underline underline-offset-2 hover:text-gray-200 transition"
+                >
+                  here
+                </Link>
+                .
+              </span>
+            )}
+          </p>
+        )}
+         <ResizablePanel>
           <AnimatePresence mode="wait">
-            <motion.div className="mt-4 flex w-full flex-col items-center justify-between ">
-              {!restoredImage && (
-                <>
-                  <div className="w-full max-w-sm space-y-4">
-                    <div className="mt-3 flex items-center space-x-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900">
-                        <RiNumber1 />
-                      </div>
-                      <p className="text-left font-medium">
-                        Choose your yard theme.
-                      </p>
-                    </div>
-                    <DropDown
-                      theme={theme}
-                      // @ts-ignore
-                      setTheme={(newTheme) => setTheme(newTheme)}
-                      themes={themes}
-                    />
-                  </div>
-                  <div className="w-full max-w-sm space-y-4">
-                    <div className="mt-10 flex items-center space-x-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900">
-                        <RiNumber2 />
-                      </div>
-                      <p className="text-left font-medium">
-                        Choose your yard type.
-                      </p>
-                    </div>
-                    <DropDown
-                      theme={yard}
-                      // @ts-ignore
-                      setTheme={(newYard) => setYard(newYard)}
-                      themes={yards}
-                    />
-                  </div>
-                  <div className="mt-4 w-full max-w-sm">
-                    <div className="mt-6 flex w-96 items-center space-x-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900">
-                        <RiNumber3 />
-                      </div>
-
-                      <p className="text-left font-medium">
-                        Upload a picture of your yard.
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
+            <motion.div className="flex justify-between items-center w-full flex-col mt-4">
               {restoredImage && (
                 <div>
-                  Here's your remodeled <b>{yard.toLowerCase()}</b> in the{' '}
-                  <b>{theme.toLowerCase()}</b> theme!{' '}
+                  Here's your remodeled <b>{yard.toLowerCase()}</b> in the{" "}
+                  <b>{theme.toLowerCase()}</b> theme!{" "}
                 </div>
               )}
               <div
                 className={`${
-                  restoredLoaded ? 'visible mt-6 -ml-8' : 'invisible'
+                  restoredLoaded ? "visible mt-6 -ml-8" : "invisible"
                 }`}
               >
                 <Toggle
-                  className={`${restoredLoaded ? 'visible mb-6' : 'invisible'}`}
+                  className={`${restoredLoaded ? "visible mb-6" : "invisible"}`}
                   sideBySide={sideBySide}
                   setSideBySide={(newVal) => setSideBySide(newVal)}
                 />
@@ -191,35 +203,125 @@ const Home: NextPage = () => {
                   restored={restoredImage!}
                 />
               )}
-              {!originalPhoto && <UploadDropZone />}
+              {status === "loading" ? (
+                <div className="max-w-[670px] h-[250px] flex justify-center items-center">
+                  <Rings
+                    height="100"
+                    width="100"
+                    color="white"
+                    radius="6"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                    ariaLabel="rings-loading"
+                  />
+                </div>
+              ) : status === "authenticated" && !originalPhoto ? (
+                <>
+                  <div className="space-y-4 w-full max-w-sm">
+                    <div className="flex mt-3 items-center space-x-3">
+                      <Image
+                        src="/number-1-white.svg"
+                        width={30}
+                        height={30}
+                        alt="1 icon"
+                      />
+                      <p className="text-left font-medium">
+                        Choose your room theme.
+                      </p>
+                    </div>
+                    <DropDown
+                      theme={theme}
+                      // @ts-ignore
+                      setTheme={(newTheme) => setTheme(newTheme)}
+                      themes={themes}
+                    />
+                  </div>
+                  <div className="space-y-4 w-full max-w-sm">
+                    <div className="flex mt-10 items-center space-x-3">
+                      <Image
+                        src="/number-2-white.svg"
+                        width={30}
+                        height={30}
+                        alt="1 icon"
+                      />
+                      <p className="text-left font-medium">
+                        Choose your room type.
+                      </p>
+                    </div>
+                    <DropDown
+                      theme={yard}
+                      // @ts-ignore
+                      setTheme={(newYard) => setYard(newYard)}
+                      themes={yards}
+                    />
+                  </div>
+                  <div className="mt-4 w-full max-w-sm">
+                    <div className="flex mt-6 w-96 items-center space-x-3">
+                      <Image
+                        src="/number-3-white.svg"
+                        width={30}
+                        height={30}
+                        alt="1 icon"
+                      />
+                      <p className="text-left font-medium">
+                        Upload a picture of your room.
+                      </p>
+                    </div>
+                  </div>
+                  <UploadDropZone />
+                </>
+              ) : (
+                !originalPhoto && (
+                  <div className="h-[250px] flex flex-col items-center space-y-6 max-w-[670px] -mt-8">
+                    <div className="max-w-xl text-gray-300">
+                      Sign in below with Google to create a free account and
+                      redesign your room today. You will get 3 generations for
+                      free.
+                    </div>
+                    <button
+                      onClick={() => signIn("google")}
+                      className="bg-gray-200 text-black font-semibold py-3 px-6 rounded-2xl flex items-center space-x-2"
+                    >
+                      <Image
+                        src="/google.png"
+                        width={20}
+                        height={20}
+                        alt="google's logo"
+                      />
+                      <span>Sign in with Google</span>
+                    </button>
+                  </div>
+                )
+              )}
               {originalPhoto && !restoredImage && (
                 <Image
                   alt="original photo"
                   src={originalPhoto}
-                  className="h-96 rounded-2xl"
+                  className="rounded-2xl h-96"
                   width={475}
                   height={475}
                 />
               )}
               {restoredImage && originalPhoto && !sideBySide && (
-                <div className="flex flex-col sm:flex-row sm:space-x-4">
+                <div className="flex sm:space-x-4 sm:flex-row flex-col">
                   <div>
-                    <h2 className="mb-1 text-lg font-medium">Original Yard</h2>
+                    <h2 className="mb-1 font-medium text-lg">Original Room</h2>
                     <Image
                       alt="original photo"
                       src={originalPhoto}
-                      className="relative h-96 w-full rounded-2xl"
+                      className="rounded-2xl relative w-full h-96"
                       width={475}
                       height={475}
                     />
                   </div>
-                  <div className="mt-8 sm:mt-0">
-                    <h2 className="mb-1 text-lg font-medium">Generated Yard</h2>
+                  <div className="sm:mt-0 mt-8">
+                    <h2 className="mb-1 font-medium text-lg">Generated Room</h2>
                     <a href={restoredImage} target="_blank" rel="noreferrer">
                       <Image
                         alt="restored photo"
                         src={restoredImage}
-                        className="relative mt-2 h-96 w-full cursor-zoom-in rounded-2xl sm:mt-0"
+                        className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in w-full h-96"
                         width={475}
                         height={475}
                         onLoadingComplete={() => setRestoredLoaded(true)}
@@ -231,58 +333,62 @@ const Home: NextPage = () => {
               {loading && (
                 <button
                   disabled
-                  className="mt-8 w-40 rounded-full bg-emerald-500 px-4 pt-2 pb-3 font-medium text-white"
+                  className="bg-blue-500 rounded-full text-white font-medium px-4 pt-2 pb-3 mt-8 w-40"
                 >
                   <span className="pt-4">
-                    <LoadingDots color="#000000" style="large" />
+                    <LoadingDots color="white" style="large" />
                   </span>
                 </button>
               )}
               {error && (
                 <div
-                  className="mt-8 max-w-[575px] rounded-xl border border-red-400 bg-red-100 px-4 py-3 text-red-700"
+                  className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mt-8 max-w-[575px]"
                   role="alert"
                 >
-                  <div className="rounded-t bg-red-500 px-4 py-2 font-bold text-white">
-                    Please try again in 24 hours
+                  <div className="bg-red-500 text-white font-bold rounded-t px-4 py-2">
+                    Please try again later.
                   </div>
-                  <div className="rounded-b border border-t-0 border-red-400 bg-red-100 px-4 py-3 text-red-700">
+                  <div className="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
                     {error}
                   </div>
                 </div>
               )}
-              <div className="flex justify-center space-x-2">
+              <div className="flex space-x-2 justify-center">
                 {originalPhoto && !loading && !error && (
                   <button
                     onClick={() => {
-                      setOriginalPhoto(null)
-                      setRestoredImage(null)
-                      setRestoredLoaded(false)
-                      setError(null)
+                      setOriginalPhoto(null);
+                      setRestoredImage(null);
+                      setRestoredLoaded(false);
+                      setError(null);
                     }}
-                    className="mt-8 rounded-full bg-blue-500 px-4 py-2 font-medium text-white transition hover:bg-blue-500/80"
+                    className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition"
                   >
-                    Generate New Yard
+                    Generate New Room
                   </button>
                 )}
                 {restoredLoaded && (
                   <button
                     onClick={() => {
-                      downloadPhoto(restoredImage!, appendNewToName(photoName!))
+                      downloadPhoto(
+                        restoredImage!,
+                        appendNewToName(photoName!)
+                      );
                     }}
-                    className="mt-8 rounded-full border bg-white px-4 py-2 font-medium text-black transition hover:bg-gray-100"
+                    className="bg-white rounded-full text-black border font-medium px-4 py-2 mt-8 hover:bg-gray-100 transition"
                   >
-                    Download Generated Yard
+                    Download Generated Room
                   </button>
                 )}
               </div>
             </motion.div>
           </AnimatePresence>
         </ResizablePanel>
+        <Toaster position="top-center" reverseOrder={false} />
       </main>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
 export default Home

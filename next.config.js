@@ -2,7 +2,7 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['upcdn.io', 'replicate.delivery', 'icons8.com'],
+    domains: ["upcdn.io", "replicate.delivery", "lh3.googleusercontent.com", 'icons8.com'],
   },
   async redirects() {
     return [
