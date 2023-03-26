@@ -25,14 +25,14 @@ export default function Pricing() {
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mb-0 mb-8">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            <p className="mt-2 text-4xl font-bold tracking-tight text-black sm:text-5xl">
               Buy YardGPT Design Credits
             </p>
           </div>
         </div>
-        <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-500 mb-10">
+        <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600 mb-10">
           You currently have{" "}
-          <span className="font-semibold text-gray-400">
+          <span className="font-semibold text-gray-900">
             {data?.remainingGenerations}{" "}
             {data?.remainingGenerations > 1 ? "credits" : "credit"}
           </span>
@@ -51,13 +51,13 @@ export default function Pricing() {
         )}
       </div>
       <div className="mt-10 text-center">
-        <h4 className="flex-none leading-6 mt-2 text-2xl font-bold tracking-tight text-white sm:text-5xl">
+        <h4 className="flex-none leading-6 mt-2 text-2xl font-bold tracking-tight text-black sm:text-5xl">
           What’s included
         </h4>
       </div>
       <ul
         role="list"
-        className="mt-8 grid grid-cols-1 gap-4 leading-6 text-gray-400 sm:grid-cols-2 sm:gap-6 mb-10"
+        className="mt-8 grid grid-cols-1 gap-4 leading-6 text-gray-900 sm:grid-cols-2 sm:gap-6 mb-10"
       >
         <li className="flex gap-x-3">
           <svg
@@ -153,10 +153,6 @@ export default function Pricing() {
           Early access to new features
         </li>
       </ul>
-      <p className="text-gray-400 mb-5">
-        Interested in team pricing or have any pricing questions? Email{" "}
-        <span className="text-gray-300">hassan@roomgpt.io</span>
-      </p>
       <Footer />
     </div>
   );

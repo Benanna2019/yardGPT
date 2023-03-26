@@ -22,12 +22,12 @@ export default function Dashboard({ yards }: { yards: Yard[] }) {
         email={session?.user?.email || undefined}
       />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mb-0 mb-8">
-        <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
-          View your <span className="text-blue-600">yard</span> generations
+        <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl mb-5">
+          View your <span className="text-blue-600">design</span> generations
         </h1>
         {yards.length === 0 ? (
-          <p className="text-gray-300">
-            You have no yard generations. Generate one{" "}
+          <p className="text-gray-900">
+            You have no design generations. Generate one{" "}
             <Link
               href="/dream"
               className="text-blue-600 underline underline-offset-2"
@@ -36,7 +36,7 @@ export default function Dashboard({ yards }: { yards: Yard[] }) {
             </Link>
           </p>
         ) : (
-          <p className="text-gray-300">
+          <p className="text-gray-900">
             Browse through your previous yard generations below. Any feedback?
             Email hassan@yardgpt.io
           </p>

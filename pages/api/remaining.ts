@@ -10,7 +10,6 @@ export default async function handler(
 ) {
   // Check if user is logged in
   const session = await getServerSession(req, res, authOptions);
-  console.log('session from remaining api route', session)
   if (!session || !session.user) {
     console.log("User not logged in");
     return res.status(401).json("Login to upload.");

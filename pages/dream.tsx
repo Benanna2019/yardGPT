@@ -139,15 +139,15 @@ const Home: NextPage = () => {
       {status === "authenticated" ? (
           <Link
             href="/buy-credits"
-            className="border border-gray-700 rounded-2xl py-2 px-4 text-gray-400 text-sm my-6 duration-300 ease-in-out hover:text-gray-300 hover:scale-105 transition"
+            className="border border-gray-700 rounded-2xl py-2 px-4 text-gray-900 text-sm my-6 duration-300 ease-in-out hover:text-gray-800 hover:scale-105 transition"
           >
             Pricing is now available.{" "}
-            <span className="font-semibold text-gray-200">Click here</span> to
+            <span className="font-semibold text-gray-900">Click here</span> to
             buy credits!
           </Link>
         ) : (
           <h3
-            className="border border-gray-700 rounded-2xl py-2 px-4 text-gray-400 text-sm my-6 duration-300 ease-in-out hover:text-gray-300 transition"
+            className="border border-gray-700 rounded-2xl py-2 px-4 text-gray-900 text-sm my-6 duration-300 ease-in-out hover:text-gray-800 transition"
           >
             Redisign your yard, garden, and exterior spaces with YardGPT.{" "}
           </h3>
@@ -156,9 +156,9 @@ const Home: NextPage = () => {
           Generate your <span className="text-emerald-600">dream</span> yard
         </h1>
         {status === "authenticated" && data && !restoredImage && (
-          <p className="text-gray-400">
+          <p className="text-gray-800">
             You have{" "}
-            <span className="font-semibold text-gray-300">
+            <span className="font-semibold text-gray-700 underline">
               {data.remainingGenerations}{" "}
               {data?.remainingGenerations > 1 ? "credits" : "credit"}
             </span>{" "}
@@ -168,7 +168,7 @@ const Home: NextPage = () => {
                 Buy more credits{" "}
                 <Link
                   href="/buy-credits"
-                  className="font-semibold text-gray-300 underline underline-offset-2 hover:text-gray-200 transition"
+                  className="font-semibold text-gray-900 underline underline-offset-2 hover:text-gray-800 transition"
                 >
                   here
                 </Link>
