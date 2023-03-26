@@ -137,7 +137,7 @@ const Home: NextPage = () => {
       <main className="mt-4 mb-8 flex w-full flex-1 flex-col items-center justify-center px-4 text-center sm:mb-0">
       {status === "authenticated" ? (
           <Link
-            href="/buy-credits"
+            href="/get-credits"
             className="border border-gray-700 rounded-2xl py-2 px-4 text-gray-900 text-sm my-6 duration-300 ease-in-out hover:text-gray-800 hover:scale-105 transition"
           >
             Pricing is now available.{" "}
