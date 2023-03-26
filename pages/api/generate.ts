@@ -1,7 +1,7 @@
-import { Ratelimit } from '@upstash/ratelimit'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import requestIp from 'request-ip'
-import redis from '../../utils/redis'
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./auth/[...nextauth]";
+import prisma from "../../lib/db";
 
 export type GenerateResponseData = {
   original: string | null
@@ -17,37 +17,47 @@ interface ExtendedNextApiRequest extends NextApiRequest {
   }
 }
 
-// Create a new ratelimiter, that allows 3 requests per 24 hours
-const ratelimit = redis
-  ? new Ratelimit({
-      redis: redis,
-      limiter: Ratelimit.fixedWindow(3, '1440 m'),
-      analytics: true,
-    })
-  : undefined
-
 export default async function handler(
   req: ExtendedNextApiRequest,
   res: NextApiResponse<GenerateResponseData | string>
 ) {
-  // Rate Limiter Code
-  if (ratelimit) {
-    const identifier = requestIp.getClientIp(req)
-    const result = await ratelimit.limit(identifier!)
-    res.setHeader('X-RateLimit-Limit', result.limit)
-    res.setHeader('X-RateLimit-Remaining', result.remaining)
-
-    if (!result.success) {
-      res
-        .status(429)
-        .json(
-          "We're temporarily limiting generations to 3 per day because of high traffic. For any questions, email hassan@hey.com"
-        )
-      return
-    }
+  const session = await getServerSession(req, res, authOptions);
+  if (!session || !session.user) {
+    return res.status(500).json("Login to upload.");
   }
 
+  // Get user from DB
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email!,
+    },
+    select: {
+      credits: true,
+    },
+  });
+
+  // Check if user has any credits left
+  if (user?.credits === 0) {
+    return res.status(400).json(`You have no generations left`);
+  }
+
+  // If they have credits, decrease their credits by one and continue
+  await prisma.user.update({
+    where: {
+      email: session.user.email!,
+    },
+    data: {
+      credits: {
+        decrement: 1,
+      },
+    },
+  });
+
+
+  try {
   const { imageUrl, theme, yard } = req.body
+
+  const prompt = `a ${theme.toLowerCase()} ${yard.toLowerCase()}`;
   // POST request to Replicate to start the image restoration generation process
   let startResponse = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
@@ -60,7 +70,7 @@ export default async function handler(
         '854e8727697a057c525cdb45ab037f64ecca770a1769cc52287c2e56472a247b',
       input: {
         image: imageUrl,
-        prompt: `a ${theme.toLowerCase()} ${yard.toLowerCase()}`,
+        prompt: prompt,
         a_prompt:
           'best quality, extremely detailed, clean, garden, ultra-detailed, ultra-realistic, award-winning, decorative rock, landscape designer, keep buildings as is, do not change architecture',
       },
@@ -95,6 +105,24 @@ export default async function handler(
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
   }
+  if (generatedImage) {
+    await prisma.yard.create({
+      data: {
+        replicateId: yardId,
+        user: {
+          connect: {
+            email: session.user.email!,
+          },
+        },
+        inputImage: originalImage,
+        outputImage: generatedImage,
+        prompt: prompt,
+      },
+    });
+  } else {
+    throw new Error("Failed to restore image");
+  }
+
   res.status(200).json(
     generatedImage
       ? {
@@ -102,6 +130,21 @@ export default async function handler(
           generated: generatedImage,
           id: yardId,
         }
-      : 'Failed to restore image'
-  )
+      : "Failed to restore image"
+  );
+} catch (error) {
+  // Increment their credit if something went wrong
+  await prisma.user.update({
+    where: {
+      email: session.user.email!,
+    },
+    data: {
+      credits: {
+        increment: 1,
+      },
+    },
+  });
+  console.error(error);
+  res.status(500).json("Failed to restore image");
+}
 }
