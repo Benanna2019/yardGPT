@@ -274,7 +274,7 @@ const Home: NextPage = () => {
               ) : (
                 !originalPhoto && (
                   <div className="h-[250px] flex flex-col items-center space-y-6 max-w-[670px] -mt-8">
-                    <div className="max-w-xl text-gray-300">
+                    <div className="max-w-xl text-gray-900">
                       Sign in below with Google to create a free account and
                       redesign your room today. You will get 3 generations for
                       free.
