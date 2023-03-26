@@ -91,30 +91,30 @@ const Home: NextPage = () => {
   )
 
   async function generatePhoto(fileUrl: string) {
-    await new Promise((resolve) => setTimeout(resolve, 200)) // TODO: See if I even need this
-    setLoading(true)
-    const res = await fetch('/api/generate', {
-      method: 'POST',
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    setLoading(true);
+    const res = await fetch("/api/generate", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ imageUrl: fileUrl, theme, yard }),
-    })
+    });
 
-    let response = (await res.json()) as GenerateResponseData
+    let response = (await res.json()) as GenerateResponseData;
     if (res.status !== 200) {
-      setError(response as any)
+      setError(response as any);
     } else {
       mutate();
       const yards =
-        (JSON.parse(localStorage.getItem('yards') || '[]') as string[]) || []
-      yards.push(response.id)
-      localStorage.setItem('yards', JSON.stringify(yards))
-      setRestoredImage(response.generated)
+        (JSON.parse(localStorage.getItem("yards") || "[]") as string[]) || [];
+      yards.push(response.id);
+      localStorage.setItem("yards", JSON.stringify(yards));
+      setRestoredImage(response.generated);
     }
     setTimeout(() => {
-      setLoading(false)
-    }, 1300)
+      setLoading(false);
+    }, 1300);
   }
 
   const router = useRouter()
@@ -223,7 +223,7 @@ const Home: NextPage = () => {
                         <RiNumber1 />
                       </div>
                       <p className="text-left font-medium">
-                        Choose your room theme.
+                        Choose your yard theme.
                       </p>
                     </div>
                     <DropDown
@@ -239,7 +239,7 @@ const Home: NextPage = () => {
                         <RiNumber2 />
                       </div>
                       <p className="text-left font-medium">
-                        Choose your room type.
+                        Choose your yard type.
                       </p>
                     </div>
                     <DropDown
@@ -255,7 +255,7 @@ const Home: NextPage = () => {
                         <RiNumber3 />
                       </div>
                       <p className="text-left font-medium">
-                        Upload a picture of your room.
+                        Upload a picture of your yard.
                       </p>
                     </div>
                   </div>
@@ -266,7 +266,7 @@ const Home: NextPage = () => {
                   <div className="h-[250px] flex flex-col items-center space-y-6 max-w-[670px] -mt-8">
                     <div className="max-w-xl text-gray-900">
                       Sign in below with Google to create a free account and
-                      redesign your room today. You will get 3 generations for
+                      redesign your yard today. You will get 3 generations for
                       free.
                     </div>
                     <button
@@ -296,7 +296,7 @@ const Home: NextPage = () => {
               {restoredImage && originalPhoto && !sideBySide && (
                 <div className="flex sm:space-x-4 sm:flex-row flex-col">
                   <div>
-                    <h2 className="mb-1 font-medium text-lg">Original Room</h2>
+                    <h2 className="mb-1 font-medium text-lg">Original Yard/Design</h2>
                     <Image
                       alt="original photo"
                       src={originalPhoto}
@@ -306,7 +306,7 @@ const Home: NextPage = () => {
                     />
                   </div>
                   <div className="sm:mt-0 mt-8">
-                    <h2 className="mb-1 font-medium text-lg">Generated Room</h2>
+                    <h2 className="mb-1 font-medium text-lg">Generated Yard/Design</h2>
                     <a href={restoredImage} target="_blank" rel="noreferrer">
                       <Image
                         alt="restored photo"
@@ -354,7 +354,7 @@ const Home: NextPage = () => {
                     }}
                     className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition"
                   >
-                    Generate New Room
+                    Generate New Yard
                   </button>
                 )}
                 {restoredLoaded && (
@@ -367,7 +367,7 @@ const Home: NextPage = () => {
                     }}
                     className="bg-white rounded-full text-black border font-medium px-4 py-2 mt-8 hover:bg-gray-100 transition"
                   >
-                    Download Generated Room
+                    Download Generated Yard
                   </button>
                 )}
               </div>
