@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useSession, signIn } from "next-auth/react";
 import useSWR from 'swr'
+import { RiNumber1, RiNumber2, RiNumber3 } from 'react-icons/ri'
 import { UploadDropzone } from 'react-uploader'
 import { Uploader } from 'uploader'
 import { CompareSlider } from '../components/CompareSlider'
@@ -41,8 +42,6 @@ const Home: NextPage = () => {
   const [photoName, setPhotoName] = useState<string | null>(null)
   const [theme, setTheme] = useState<themeType>('Xeriscaping')
   const [yard, setYard] = useState<yardType>('Ecological')
-
-  const router = useRouter()
 
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, mutate } = useSWR("/api/remaining", fetcher);
@@ -103,7 +102,6 @@ const Home: NextPage = () => {
     })
 
     let response = (await res.json()) as GenerateResponseData
-    console.log('res from replicate', response)
     if (res.status !== 200) {
       setError(response as any)
     } else {
@@ -118,6 +116,8 @@ const Home: NextPage = () => {
       setLoading(false)
     }, 1300)
   }
+
+  const router = useRouter()
 
   useEffect(() => {
     if (router.query.success === "true") {
@@ -219,12 +219,9 @@ const Home: NextPage = () => {
                 <>
                   <div className="space-y-4 w-full max-w-sm">
                     <div className="flex mt-3 items-center space-x-3">
-                      <Image
-                        src="/number-1-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900">
+                        <RiNumber1 />
+                      </div>
                       <p className="text-left font-medium">
                         Choose your room theme.
                       </p>
@@ -238,12 +235,9 @@ const Home: NextPage = () => {
                   </div>
                   <div className="space-y-4 w-full max-w-sm">
                     <div className="flex mt-10 items-center space-x-3">
-                      <Image
-                        src="/number-2-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900">
+                        <RiNumber2 />
+                      </div>
                       <p className="text-left font-medium">
                         Choose your room type.
                       </p>
@@ -257,12 +251,9 @@ const Home: NextPage = () => {
                   </div>
                   <div className="mt-4 w-full max-w-sm">
                     <div className="flex mt-6 w-96 items-center space-x-3">
-                      <Image
-                        src="/number-3-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900">
+                        <RiNumber3 />
+                      </div>
                       <p className="text-left font-medium">
                         Upload a picture of your room.
                       </p>
