@@ -3,14 +3,14 @@ import Document, { Head, Html, Main, NextScript } from 'next/document'
 class MyDocument extends Document {
   render() {
     let description = 'Generate your dream yard/garden in seconds.'
-    let ogimage = 'https://www.roomgpt.io/og-image.png'
-    let sitename = 'yardPT.io'
+    let ogimage = 'https://www.yardgpt.design/og-image.png'
+    let sitename = 'yardPT.design'
     let title = 'Dream Yard/Garden Generator'
 
     return (
       <Html lang="en">
         <Head>
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/favicon.png" />
           <meta name="description" content={description} />
           <meta property="og:site_name" content={sitename} />
           <meta property="og:description" content={description} />
