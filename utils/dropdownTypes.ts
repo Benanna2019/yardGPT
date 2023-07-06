@@ -1,30 +1,30 @@
 export type themeType =
-  | 'Xeriscaping'
-  | 'Orchard'
-  | 'Minimalism'
-  | 'Exotic'
-  | 'Tropical'
+  | 'Vegetable'
+  | 'Herb'
+  | 'Family Garden'
+  | 'Memorial Garden'
+  | 'Souvenir Garden'
+  | 'Rock Garden'
 
 export type yardType =
-  | 'Dry Garden'
-  | 'Courtyard Garden'
-  | 'Dry Laid'
-  | 'Ecological'
-  | 'Fescue'
-  | 'Gazebo'
+  | 'English Country Cottage'
+  | 'Mediterranean'
+  | 'European Formal'
+  | 'Japanese Zen'
+  | 'Tropical'
 
 export const themes: themeType[] = [
-  'Xeriscaping',
-  'Minimalism',
-  'Exotic',
-  'Tropical',
-  'Orchard',
+  'Vegetable',
+  'Herb',
+  'Family Garden',
+  'Memorial Garden',
+  'Souvenir Garden',
+  'Rock Garden',
 ]
 export const yards: yardType[] = [
-  'Dry Garden',
-  'Courtyard Garden',
-  'Dry Laid',
-  'Ecological',
-  'Fescue',
-  'Gazebo',
+  'English Country Cottage',
+  'Mediterranean',
+  'European Formal',
+  'Japanese Zen',
+  'Tropical',
 ]

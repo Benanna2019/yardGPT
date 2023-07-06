@@ -14,28 +14,19 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <main className=" mt-20 flex w-full flex-1 flex-col items-center justify-center px-4 text-center sm:mt-20">
-        <a
-          href="https://vercel.fyi/roomGPT"
-          target="_blank"
-          rel="noreferrer"
-          className="mb-5 rounded-lg border border-gray-700 py-2 px-4 text-sm text-gray-700 transition duration-300 ease-in-out hover:text-gray-400"
-        >
-          Clone and deploy your own with{' '}
-          <span className="text-blue-600">Vercel</span>
-        </a>
+      <main className="mt-20 flex w-full flex-1 flex-col items-center justify-center px-4 text-center sm:mt-20">
         <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold tracking-normal text-gray-800 sm:text-7xl">
-          Generate your dream yard, garden, or exterior{' '}
+          Thank you for your interest in{' '}
           <span className="relative whitespace-nowrap text-emerald-600">
             <SquigglyLines />
-            <span className="relative">through AI</span>
+            <span className="relative">Yard GPT Design</span>
           </span>{' '}
         </h1>
         <h2 className="mx-auto mt-12 max-w-xl text-lg leading-7 sm:text-gray-600">
-          Take a picture of your yard, garden, or exterior and see how it looks in
-          different themes. Sign in to use your free credits.
+          The project has become bigger than expected and I am currently working
+          to pass it over to a new maintainer.
         </h2>
-        <Link
+        {/* <Link
           className="mt-8 rounded-xl bg-emerald-600 px-4 py-3 font-medium text-white transition hover:bg-emerald-500 sm:mt-10"
           href="/dream"
         >
@@ -49,7 +40,7 @@ const Home: NextPage = () => {
                 <img
                   alt="Original photo of a yard with yardGPT.io"
                   src="/original-pic.jpeg"
-                  className="h-96 w-full rounded-lg object-cover"
+                  className="h-96 w-full rounded-lg object-cover border-4 border-red-600"
                 />
               </div>
               <div className="mt-8 sm:mt-0 w-1/2">
@@ -62,7 +53,7 @@ const Home: NextPage = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </main>
       {/* <Testimonials /> */}
       <Footer />

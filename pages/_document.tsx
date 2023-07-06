@@ -21,7 +21,7 @@ class MyDocument extends Document {
           <meta property="og:image" content={ogimage} />
           <meta name="twitter:image" content={ogimage} />
         </Head>
-        <body className="bg-slate-50 text-black">
+        <body className="bg-slate-50 text-black bg-yardgpt-bg bg-cover bg-no-repeat">
           <Main />
           <NextScript />
         </body>

@@ -10,6 +10,9 @@ module.exports = {
       screens: {
         xs: "330px",
       },
+      backgroundImage: {
+        "yardgpt-bg": "url('/yardgpt-bg.png')",
+      }
     },
   },
   plugins: [require("@tailwindcss/forms"), require("@headlessui/tailwindcss")],
