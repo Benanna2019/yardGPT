@@ -1,12 +1,12 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Header({
   photo,
   email,
 }: {
-  photo?: string
-  email?: string
+  photo?: string;
+  email?: string;
 }) {
   return (
     <header className="xs:flex-row mt-3 flex w-full flex-col items-center justify-between gap-2 border-b border-gray-500 px-2 pb-7 sm:px-4">
@@ -22,7 +22,7 @@ export default function Header({
           yardGPT.design
         </h1>
       </Link>
-      {/* {email ? (
+      {email ? (
         <div className="flex items-center space-x-4">
           <Link
             href="/dashboard"
@@ -58,7 +58,7 @@ export default function Header({
         >
           <p>Sign Up </p>
         </Link>
-      )} */}
+      )}
     </header>
-  )
+  );
 }

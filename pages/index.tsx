@@ -1,10 +1,10 @@
-import { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
-import SquigglyLines from '../components/SquigglyLines'
+import { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import Footer from "../components/footer";
+import Header from "../components/header";
+import SquigglyLines from "../components/squigglylines";
 
 const Home: NextPage = () => {
   return (
@@ -16,17 +16,17 @@ const Home: NextPage = () => {
       <Header />
       <main className="mt-20 flex w-full flex-1 flex-col items-center justify-center px-4 text-center sm:mt-20">
         <h1 className="font-display mx-auto max-w-4xl text-5xl font-bold tracking-normal text-gray-800 sm:text-7xl">
-          Thank you for your interest in{' '}
+          Thank you for your interest in{" "}
           <span className="relative whitespace-nowrap text-emerald-600">
             <SquigglyLines />
             <span className="relative">Yard GPT Design</span>
-          </span>{' '}
+          </span>{" "}
         </h1>
         <h2 className="mx-auto mt-12 max-w-xl text-lg leading-7 sm:text-gray-600">
           The project has become bigger than expected and I am currently working
           to pass it over to a new maintainer.
         </h2>
-        {/* <Link
+        <Link
           className="mt-8 rounded-xl bg-emerald-600 px-4 py-3 font-medium text-white transition hover:bg-emerald-500 sm:mt-10"
           href="/dream"
         >
@@ -53,12 +53,12 @@ const Home: NextPage = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
       </main>
       {/* <Testimonials /> */}
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

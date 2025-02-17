@@ -1,20 +1,20 @@
-import { Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from "@headlessui/react";
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from '@heroicons/react/20/solid'
-import { Fragment } from 'react'
-import { yardType, themeType } from '../utils/dropdownTypes'
+} from "@heroicons/react/20/solid";
+import { Fragment } from "react";
+import { yardType, themeType } from "../utils/dropdowntypes";
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 interface DropDownProps {
-  theme: themeType | yardType
-  setTheme: (theme: themeType | yardType) => void
-  themes: themeType[] | yardType[]
+  theme: themeType | yardType;
+  setTheme: (theme: themeType | yardType) => void;
+  themes: themeType[] | yardType[];
 }
 
 // TODO: Change names since this is a generic dropdown now
@@ -55,9 +55,9 @@ export default function DropDown({ theme, setTheme, themes }: DropDownProps) {
                   <button
                     onClick={() => setTheme(themeItem)}
                     className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      themeItem === theme ? 'bg-gray-200' : '',
-                      'flex w-full items-center justify-between space-x-2 px-4 py-2 text-left text-sm'
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      themeItem === theme ? "bg-gray-200" : "",
+                      "flex w-full items-center justify-between space-x-2 px-4 py-2 text-left text-sm"
                     )}
                   >
                     <span>{themeItem}</span>
@@ -72,5 +72,5 @@ export default function DropDown({ theme, setTheme, themes }: DropDownProps) {
         </Menu.Items>
       </Transition>
     </Menu>
-  )
+  );
 }
