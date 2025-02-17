@@ -5,7 +5,7 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
-import { themeType, yardType } from "../utils/dropdowntypes";
+import { themeType, yardType } from "../utils/dropdownTypes";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");

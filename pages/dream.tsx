@@ -18,7 +18,7 @@ import Toggle from "../components/toggle";
 import appendNewToName from "../utils/appendnewtoname";
 import downloadPhoto from "../utils/downloadphoto";
 import DropDown from "../components/dropdown";
-import { yardType, yards, themeType, themes } from "../utils/dropdowntypes";
+import { yardType, yards, themeType, themes } from "../utils/dropdownTypes";
 import { Rings } from "react-loader-spinner";
 import { GenerateResponseData } from "./api/generate";
 import { Toaster, toast } from "react-hot-toast";

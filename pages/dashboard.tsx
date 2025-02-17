@@ -11,10 +11,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import * as React from "react";
 
-export default function Dashboard() {
+export default function Dashboard({ yards }: { yards: Yard[] }) {
+  const session = useSession();
   const router = useRouter();
+
   React.useEffect(() => {
-    router.push("/");
+    if (!session) {
+      router.push("/");
+    }
   });
 
   return (
@@ -24,15 +28,15 @@ export default function Dashboard() {
       </Head>
       <Header />
       <main className="mt-12 mb-8 flex w-full flex-1 flex-col items-center justify-center px-4 text-center sm:mb-0">
-        <h1 className="font-display mx-auto mb-5 max-w-4xl text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl">
-          You should be on this page
-        </h1>
         {/* <h1 className="font-display mx-auto mb-5 max-w-4xl text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl">
+          You should be on this page
+        </h1> */}
+        <h1 className="font-display mx-auto mb-5 max-w-4xl text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl">
           View your <span className="text-blue-600">yard designs</span>
         </h1>
         {yards.length === 0 ? (
           <p className="text-gray-900">
-            You have no design generations. Generate one{' '}
+            You have no design generations. Generate one{" "}
             <Link
               href="/dream"
               className="text-blue-600 underline underline-offset-2"
@@ -51,34 +55,34 @@ export default function Dashboard() {
             original={yard.inputImage}
             generated={yard.outputImage}
           />
-        ))} */}
+        ))}
       </main>
       <Footer />
     </div>
   );
 }
 
-// export async function getServerSideProps(ctx: any) {
-//   const session = await getServerSession(ctx.req, ctx.res, authOptions)
-//   if (!session || !session.user) {
-//     return { props: { yards: [] } }
-//   }
+export async function getServerSideProps(ctx: any) {
+  const session = await getServerSession(ctx.req, ctx.res, authOptions);
+  if (!session || !session.user) {
+    return { props: { yards: [] } };
+  }
 
-//   let yards = await prisma.yard.findMany({
-//     where: {
-//       user: {
-//         email: session.user.email,
-//       },
-//     },
-//     select: {
-//       inputImage: true,
-//       outputImage: true,
-//     },
-//   })
+  let yards = await prisma.yard.findMany({
+    where: {
+      user: {
+        email: session.user.email,
+      },
+    },
+    select: {
+      inputImage: true,
+      outputImage: true,
+    },
+  });
 
-//   return {
-//     props: {
-//       yards,
-//     },
-//   }
-// }
+  return {
+    props: {
+      yards,
+    },
+  };
+}
